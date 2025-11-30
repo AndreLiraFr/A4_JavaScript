@@ -173,7 +173,7 @@ export function buildApp({ menuItemAccessor }) {
 
     //404 to file not found
     app.use(function (req, res, next) {
-        const fileToSend = path.join(__dirname, "public", "404.html");
+        let fileToSend = path.join(__dirname, "public", "404.html");
         res.status(404).sendFile(fileToSend);
 
     });
