@@ -2,6 +2,7 @@ const API_URL = 'http://localhost:8000/menuitems';
 
 let editMode = false;
 let editId = null;
+let allItems = [];
 
 window.onload = function () {
    
@@ -28,9 +29,14 @@ window.onload = function () {
 
 async function loadItems() {
     try {
-        const response = await fetch(API_URL);
-        const items = await response.json();
-        displayItems(items);
+        let response = await fetch(API_URL);
+        let result = await response.json();
+        if (result.err) {
+            showMessage(result.err, "error");
+            return;
+        }        
+        allItems = result.data;
+        displayItems(allItems);
     } catch (err) {
         showMessage("Error loading items", "error");
     }
@@ -38,7 +44,7 @@ async function loadItems() {
 
 //display items in table
 function displayItems(items) {
-    const container = document.getElementById("itemsList");
+    let container = document.getElementById("itemsList");
     container.innerHTML = "";
 
     if (!items.length) {
@@ -87,7 +93,7 @@ function displayItems(items) {
 function onTableClick(e) {
     if (e.target.tagName !== "BUTTON") return;
 
-    let id = e.target.getAttribute("data-id");
+    let id = parseInt(e.target.getAttribute("data-id"));
 
     if (e.target.classList.contains("edit-btn")) {
         editItem(id);
@@ -100,28 +106,28 @@ function onTableClick(e) {
 
 // edit
 async function editItem(id) {
-    try {
-        const response = await fetch(`${API_URL}/${id}`);
-        const item = await response.json();
-
-        document.getElementById("id").value = item.id;
-        document.getElementById("id").disabled = true;
-
-        document.getElementById("category").value = item.category;
-        document.getElementById("description").value = item.description;
-        document.getElementById("price").value = item.price;
-        document.getElementById("vegetarian").checked = item.vegetarian;
-
-        editMode = true;
-        editId = id;
-
-        document.getElementById("inputPanel").classList.remove("hidden");
-        document.getElementById("cancelBtn").style.display = "inline-block";
-
-        window.scrollTo(0, 0);
-    } catch (err) {
-        showMessage("Error loading item", "error");
+    let item = allItems.find(i => i.id === id);
+    
+    if (!item) {
+        showMessage("Item not found", "error");
+        return;
     }
+
+    document.getElementById("id").value = item.id;
+    document.getElementById("id").disabled = true;
+
+    document.getElementById("category").value = item.category;
+    document.getElementById("description").value = item.description;
+    document.getElementById("price").value = item.price;
+    document.getElementById("vegetarian").checked = item.vegetarian;
+
+    editMode = true;
+    editId = id;
+
+    document.getElementById("inputPanel").classList.remove("hidden");
+    document.getElementById("cancelBtn").style.display = "inline-block";
+
+    window.scrollTo(0, 0);
 }
 
 // add/update
@@ -144,7 +150,7 @@ function doDone() {
 // create
 async function createItem(data) {
     try {
-        let response = await fetch(API_URL, {
+        let response = await fetch(`${API_URL}/${data.id}`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(data)
@@ -157,9 +163,9 @@ async function createItem(data) {
             doCancel();
             loadItems();
         } else {
-            showMessage(result.error, "error");
+            showMessage(result.err || "Error creating item", "error");
         }
-    } catch {
+    } catch (err) {
         showMessage("Error creating item", "error");
     }
 }
@@ -167,22 +173,22 @@ async function createItem(data) {
 //update
 async function updateItem(data) {
     try {
-        const response = await fetch(`${API_URL}/${editId}`, {
+        let response = await fetch(`${API_URL}/${editId}`, {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(data)
         });
 
-        const result = await response.json();
+        let result = await response.json();
 
         if (response.ok) {
             showMessage("Item updated!", "success");
             doCancel();
             loadItems();
         } else {
-            showMessage(result.error, "error");
+            showMessage(result.err || "Error updating item", "error");
         }
-    } catch {
+    } catch (err) {
         showMessage("Error updating item", "error");
     }
 }
@@ -192,16 +198,16 @@ async function deleteItem(id) {
     if (!confirm("Delete this item?")) return;
 
     try {
-        const response = await fetch(`${API_URL}/${id}`, { method: "DELETE" });
+        let response = await fetch(`${API_URL}/${id}`, { method: "DELETE" });
+        let result = await response.json();
 
         if (response.ok) {
             showMessage("Item deleted", "success");
             loadItems();
         } else {
-            const result = await response.json();
-            showMessage(result.error, "error");
+            showMessage(result.err || "Error deleting item", "error");
         }
-    } catch {
+    } catch (err) {
         showMessage("Error deleting item", "error");
     }
 }
@@ -225,7 +231,7 @@ function doCancel() {
 
 //msg
 function showMessage(text, type) {
-    const msg = document.getElementById("message");
+    let msg = document.getElementById("message");
     msg.textContent = text;
     msg.className = type;
 
