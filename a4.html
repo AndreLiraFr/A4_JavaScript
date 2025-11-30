@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <title>A4 - Web Application with Express</title>
+            <style>
+/* From extension vscode.github */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+.vscode-dark img[src$=\#gh-light-mode-only],
+.vscode-light img[src$=\#gh-dark-mode-only],
+.vscode-high-contrast:not(.vscode-high-contrast-light) img[src$=\#gh-light-mode-only],
+.vscode-high-contrast-light img[src$=\#gh-dark-mode-only] {
+	display: none;
+}
+
+</style>
+            
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+<style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', system-ui, 'Ubuntu', 'Droid Sans', sans-serif;
+                font-size: 16px;
+                line-height: 1.6;
+            }
+        </style>
+        <style>
+.task-list-item {
+    list-style-type: none;
+}
+
+.task-list-item-checkbox {
+    margin-left: -20px;
+    vertical-align: middle;
+    pointer-events: none;
+}
+</style>
+<style>
+:root {
+  --color-note: #0969da;
+  --color-tip: #1a7f37;
+  --color-warning: #9a6700;
+  --color-severe: #bc4c00;
+  --color-caution: #d1242f;
+  --color-important: #8250df;
+}
+
+</style>
+<style>
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-note: #2f81f7;
+    --color-tip: #3fb950;
+    --color-warning: #d29922;
+    --color-severe: #db6d28;
+    --color-caution: #f85149;
+    --color-important: #a371f7;
+  }
+}
+
+</style>
+<style>
+.markdown-alert {
+  padding: 0.5rem 1rem;
+  margin-bottom: 16px;
+  color: inherit;
+  border-left: .25em solid #888;
+}
+
+.markdown-alert>:first-child {
+  margin-top: 0
+}
+
+.markdown-alert>:last-child {
+  margin-bottom: 0
+}
+
+.markdown-alert .markdown-alert-title {
+  display: flex;
+  font-weight: 500;
+  align-items: center;
+  line-height: 1
+}
+
+.markdown-alert .markdown-alert-title .octicon {
+  margin-right: 0.5rem;
+  display: inline-block;
+  overflow: visible !important;
+  vertical-align: text-bottom;
+  fill: currentColor;
+}
+
+.markdown-alert.markdown-alert-note {
+  border-left-color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-note .markdown-alert-title {
+  color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-important {
+  border-left-color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-important .markdown-alert-title {
+  color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-warning {
+  border-left-color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-warning .markdown-alert-title {
+  color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-tip {
+  border-left-color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-tip .markdown-alert-title {
+  color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-caution {
+  border-left-color: var(--color-caution);
+}
+
+.markdown-alert.markdown-alert-caution .markdown-alert-title {
+  color: var(--color-caution);
+}
+
+</style>
+        <style>
+body {
+    font-size: 16px;
+}
+
+h1 {
+    color: #FF6600;
+    border-bottom: none;
+}
+
+h2 {
+    color: midnightblue;
+    border-bottom: solid thin #CC9;
+	margin-top: 2rem;
+}
+
+h3 {
+    color: steelblue;
+}
+
+h4 {
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+#footer {
+    margin-top: 2rem;
+    background-color: aliceblue;
+    padding: 0.5rem;
+    font-size: small;
+    font-style: italic;
+    display: flex;
+    justify-content: space-between;
+}
+
+ol li ol {
+    list-style-type: lower-alpha; /* For lowercase letters */
+}
+
+code {
+    background-color: #eee;
+    padding: 0 0.5rem;
+}
+
+</style>
+        </head>
+        <body class="vscode-body vscode-light">
+            <h1 id="a4---web-application-with-express">A4 - Web Application with Express</h1>
+<p>You may work on this assignment in pairs (groups of 2).</p>
+<h2 id="overview">Overview</h2>
+<ul>
+<li>Create a web application that performs CRUD operations on a database by
+making REST-style requests to a web service API.</li>
+<li>Use Node, Mongo, and Express for the back end of the application.</li>
+</ul>
+<h2 id="the-back-end">The Back End</h2>
+<p>Using Express, write a web server that performs two main functions:</p>
+<ol>
+<li>Handles regular, static file requests by sending the requested content, or a
+404 page if the content cannot be found.</li>
+<li>Supports a REST-based API for CRUD operations on the database. The API
+should:
+<ul>
+<li>use a base URL of <code>/menuitems</code></li>
+<li>use the standard HTTP verbs to indicate the four CRUD operations</li>
+<li>use instances of the MenuItem class to validate incoming data (for POST
+and PUT) requests</li>
+<li>send responses with appropriate HTTP status codes, as follows:
+<ul>
+<li>200 - a successful GET, DELETE, or PUT operation</li>
+<li>201 - a successful POST operation</li>
+<li>400 - a POST or PUT request with a payload that is invalid within this
+web service (e.g., a numeric value that is outside an acceptable
+range)</li>
+<li>404 - a PUT or DELETE request where the relevant entity does not exist</li>
+<li>405 - an unsupported operation (e.g., a bulk DELETE request; e.g., an
+unknown command)</li>
+<li>409 - a POST request where the relevant entity already exists (and so
+cannot be created)</li>
+<li>500 - a critical server-side error (e.g., database unavailable)</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<h2 id="the-front-end">The Front End</h2>
+<ul>
+<li>Write a web user interface that displays the database records and allows the
+user to perform CRUD operations.</li>
+<li>The UI should keep the user well informed about what is happening in the
+application. It should confirm successful operations and explain
+unsuccessful ones.</li>
+<li>Remember that the user is not a programmer and has no knowledge of the
+technology being used on the back end. Therefore, messages displayed to the
+user should not be technical in nature. For example, do not display a
+Mongo-generated error message or code; instead, explain in general terms
+what the problem is and, if applicable, how to fix it.</li>
+</ul>
+<h2 id="starter-code">Starter Code</h2>
+<ul>
+<li>
+<p>After unzipping the starter code, run the command <code>npm install</code> to install
+the project dependencies.</p>
+</li>
+<li>
+<p>The following modules/classes are provided and should not be changed.</p>
+<ul>
+<li>
+<p><code>server.mjs</code></p>
+</li>
+<li>
+<p><code>db/connection-manager.mjs</code></p>
+</li>
+<li>
+<p><code>db/database-builder.mjs</code></p>
+</li>
+<li>
+<p><code>db/menu-item-accessor.mjs</code></p>
+</li>
+<li>
+<p><code>entity/menu-item.mjs</code></p>
+<ul>
+<li>NOTE: the constructor throws an Error if any input data is invalid -
+category is unknown, price is negative, etc.</li>
+</ul>
+</li>
+<li>
+<p><code>utils/constants.mjs</code></p>
+</li>
+<li>
+<p><code>test/test.mjs</code></p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="new-code-to-write">New Code to Write</h2>
+<ul>
+<li>
+<p>The back end Express application. You given a starter version of <code>app.mjs</code>.
+Note that it contains a function called, <em>buildApp</em>. You should write your
+code inside this function.</p>
+</li>
+<li>
+<p>The front end web page, together with any supporting CSS or JS files. Place
+all of these files in the <code>public</code> folder so that the static file handling
+will be able to serve them to the browser.</p>
+</li>
+</ul>
+<h2 id="testing">Testing</h2>
+<h3 id="general">General</h3>
+<p>The most important thing in any web application is that the web server keeps
+running. No matter what you throw at it, the server should never crash.</p>
+<h3 id="back-end">Back End</h3>
+<p>A complete Mocha test suite is provided. To run the tests, enter the command
+<code>npm test</code>.</p>
+<p><img src="MochaTests.png" alt="testing screenshot"></p>
+<h3 id="front-end-gui">Front End (GUI)</h3>
+<p><mark>In addition to</mark> the back end testing (<code>npm test</code>), you must test the
+GUI thoroughly and verify that:</p>
+<ol>
+<li>
+<p>Normal CRUD operations work end-to-end from the GUI.</p>
+<ul>
+<li>You can create, read, update, and delete menu items through the interface.</li>
+<li>After each action, reload the page to confirm the change was saved to the
+database. (Do NOT use <code>npm test</code> to check persistence because the test
+suite resets the database.)</li>
+</ul>
+</li>
+<li>
+<p>A 404 page is displayed when a non-existent resource is requested.</p>
+<ul>
+<li>Manually enter an invalid URL (for example, /menuitems/9999 or an
+incorrect path).</li>
+<li>Confirm that your custom 404 page is displayed, not an Express error or a
+blank page.</li>
+</ul>
+</li>
+<li>
+<p>Helpful error messages appear when the server rejects invalid data.</p>
+<ul>
+<li>Trigger at least one 400-level error (for example, send invalid price or
+missing fields).</li>
+<li>The GUI must:
+<ul>
+<li>show a clear error message (popup or inline)</li>
+<li>not silently fail</li>
+<li>not leave the user stuck with no feedback.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<p>All GUI behaviour must be demonstrated using the live server and real database
+-- no hard-coded lists or simulated data.</p>
+<h2 id="what-to-hand-in">What to Hand In</h2>
+<ul>
+<li>Your entire project folder, zipped. (You may delete the &quot;node_modules&quot;
+folder before zipping.)</li>
+<li>A screen-shot showing the back end test results in a command window.</li>
+<li>A video showing the front end testing outlined above.</li>
+</ul>
+<div id="footer">
+<div>Advanced JavaScript (Fall 2025)</div>
+<div>S. Monk</div>
+</div>
+
+            
+            
+        </body>
+        </html>

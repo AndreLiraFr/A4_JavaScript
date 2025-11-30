@@ -1,0 +1,52 @@
+table,
+td,
+th {
+    border: solid thin gray;
+    border-collapse: collapse;
+}
+
+td,
+th {
+    padding: 10px;
+}
+
+tr:first-child {
+    background-color: midnightblue;
+    color: white;
+}
+
+tr:not(:first-child):not(.selected):hover {
+    background-color: lightblue;
+}
+
+.selected {
+    background-color: lightgoldenrodyellow;
+}
+
+td:last-child, th:last-child {
+    text-align: right;
+}
+
+#inputPanel {
+    border: dashed thin black;
+    background-color: aliceblue;
+    margin: 1em 0;
+    padding: 20px;
+}
+
+.inputLabel {
+    width: 100px;
+    float: left;
+}
+
+.hidden {
+    display: none;
+}
+
+.app-row { background-color: #eef8f0; }
+.ent-row { background-color: #f0f6ff; }
+.des-row { background-color: #fff1f7; }
+
+.cat-text {
+    font-weight: bold;
+}

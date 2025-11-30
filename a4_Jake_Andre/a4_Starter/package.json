@@ -1,0 +1,24 @@
+{
+  "name": "a4_solution_v2",
+  "version": "1.0.0",
+  "description": "solution to AJS Assignment 4",
+  "main": "server.mjs",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "author": "smonk",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
+    "mongodb": "^7.0.0"
+  },
+  "devDependencies": {
+    "chai": "^6.2.1",
+    "mocha": "^11.7.5",
+    "supertest": "^7.1.4"
+  }
+}

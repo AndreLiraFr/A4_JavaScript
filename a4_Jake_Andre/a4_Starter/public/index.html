@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu Manager</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="gui.js"></script>
+</head>
+<body>
+    <h1>Restaurant Menu Manager</h1>
+
+    <div id="message"></div>
+
+    <div id="inputPanel" class="hidden">
+        <div class="inputControl">
+            <div class="inputLabel">ID</div>
+            <input id="id" type="number" />
+        </div>
+        <br>
+        <div class="inputControl">
+            <div class="inputLabel">Category</div>
+            <select id="category">
+                <option value="">Select...</option>
+                <option value="APP">Appetizer</option>
+                <option value="ENT">Entree</option>
+                <option value="DES">Dessert</option>
+            </select>
+        </div>
+        <br>
+        <div class="inputControl">
+            <div class="inputLabel">Description</div>
+            <input id="description" />
+        </div>
+        <br>
+        <div class="inputControl">
+            <div class="inputLabel">Price</div>
+            <input id="price" type="number" />
+        </div>
+        <br>
+        <div class="inputControl">
+            <label>
+                <input id="vegetarian" type="checkbox" />
+                Vegetarian
+            </label>
+        </div>
+        <br>
+        <div id="buttonPanel">
+            <button id="doneButton">Done</button>
+            <button id="cancelBtn">Cancel</button>
+        </div>
+    </div>
+
+    <button id="addButton">Add Item</button>
+    <br><br>
+    <div id="itemsList"></div>
+
+</body>
+</html>
